@@ -1,7 +1,7 @@
 BEGIN;
 CREATE TABLE IF NOT EXISTS links(
     id serial primary key, 
-    shorturl text UNIQUE, 
+    shorturl char(10) UNIQUE , 
     originalurl text);
 COMMIT;
 

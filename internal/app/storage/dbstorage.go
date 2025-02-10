@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/golang-migrate/migrate"
-	"github.com/golang-migrate/migrate/database/postgres"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
@@ -30,7 +30,8 @@ func NewDBStorage(dbname string) (Storage, error) {
 	}
 	fmt.Println("2")
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://./migrations",
+		//"file://./migrations",
+		"file://./internal/app/migrations",
 		"postgres", driver)
 	if err != nil {
 		fmt.Println(err)
