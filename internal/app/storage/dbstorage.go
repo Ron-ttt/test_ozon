@@ -7,6 +7,8 @@ import (
 
 	"github.com/golang-migrate/migrate"
 	"github.com/golang-migrate/migrate/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 type DBStorage struct {
@@ -17,22 +19,29 @@ func NewDBStorage(dbname string) (Storage, error) {
 
 	db, err := sql.Open("postgres", dbname)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
+	fmt.Println("1")
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
+	fmt.Println("2")
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://./db/migrations",
+		"file://./migrations",
 		"postgres", driver)
 	if err != nil {
+		fmt.Println(err)
 		return nil, err
 	}
+	fmt.Println("3")
 	if err = m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
+		fmt.Println(err)
 		return nil, err
 	}
-
+	fmt.Println("4")
 	return &DBStorage{db: db}, nil
 }
 

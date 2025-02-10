@@ -21,7 +21,7 @@ type URLRegistryResult struct {
 func Init() handlerWrapper {
 	localhost, baseURL, dbAdress := config.Flags()
 
-	//dbAdress := "postgresql://postgres:190603@localhost:5432/postgres"
+	dbAdress = "postgresql://postgres:190603@localhost:5432/postgres?sslmode=disable"
 	if dbAdress != "" {
 		dBStorage, err := storage.NewDBStorage(dbAdress)
 		if err == nil {
