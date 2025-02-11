@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package shortener;
+import "google/protobuf/empty.proto";
+
+message IndexPageRequest{
+  string original_url = 1;
+}
+message IndexPageResponse{
+  string short_url =1;
+  string error =2;
+}
+
+message RedirectToRequest{
+  string shortURL = 1;
+}
+message RedirectToResponse{
+  string originalURL =1;
+  string error =2;
+}
+
+service Shortener{
+  rpc IndexPage(IndexPageRequest) returns (IndexPageResponse);
+  rpc RedirectTo(RedirectToRequest) returns(RedirectToResponse);
+}
