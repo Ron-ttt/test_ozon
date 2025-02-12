@@ -59,7 +59,7 @@ func (s *ShortenerServer) IndexPage(ctx context.Context, in *pb.IndexPageRequest
 
 	oldShortURL, err := store.Find(in.OriginalUrl)
 	if err == nil {
-		response.ShortUrl = baseURL + oldShortURL
+		response.ShortUrl = baseURL + "/" + oldShortURL
 		return &response, nil
 	}
 
