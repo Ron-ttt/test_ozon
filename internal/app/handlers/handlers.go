@@ -21,6 +21,8 @@ type URLRegistryResult struct {
 const localhost = "localhost:8080"
 const baseURL = "http://" + localhost
 
+var Flag bool
+
 func Init() handlerWrapper {
 
 	dbflag := config.Flags()
@@ -29,9 +31,11 @@ func Init() handlerWrapper {
 	if dbflag {
 		dBStorage, err := storage.NewDBStorage(dbAdress)
 		if err == nil {
+			Flag = true
 			return handlerWrapper{storageInterface: dBStorage, Localhost: localhost, baseURL: baseURL + "/"}
 		}
 	}
+	Flag = false
 	return handlerWrapper{storageInterface: storage.NewMapStorage(), Localhost: localhost, baseURL: baseURL + "/"}
 }
 

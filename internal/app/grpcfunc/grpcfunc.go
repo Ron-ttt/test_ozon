@@ -3,7 +3,7 @@ package grpcfunc
 import (
 	"context"
 	"net/url"
-	"testozon/internal/app/config"
+	"testozon/internal/app/handlers"
 	pb "testozon/internal/app/proto"
 	"testozon/internal/app/storage"
 	"testozon/internal/app/utils"
@@ -24,10 +24,8 @@ type ShortenerServer struct {
 }
 
 func Init() {
-	dbflag := config.Flags()
-
 	dbAdress := "postgresql://postgres_user:postgres_password@postgres_container:5432/postgres?sslmode=disable"
-	if dbflag {
+	if handlers.Flag {
 		dBStorage, err := storage.NewDBStorage(dbAdress)
 		if err == nil {
 			store = dBStorage

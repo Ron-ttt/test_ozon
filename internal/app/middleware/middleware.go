@@ -3,6 +3,7 @@ package middleware
 import (
 	"compress/gzip"
 	"io"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -20,7 +21,7 @@ func Logger1(h http.Handler) http.Handler {
 		var sugar zap.SugaredLogger
 		logger, err := zap.NewDevelopment()
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 		sugar = *logger.Sugar()
 		sugar.Infoln(
