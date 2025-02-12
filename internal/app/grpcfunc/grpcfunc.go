@@ -14,7 +14,7 @@ import (
 
 var store storage.Storage
 
-const localhost = "localhost:8080"
+const localhost = "localhost:3200"
 const baseURL = "http://" + localhost
 
 type ShortenerServer struct {
