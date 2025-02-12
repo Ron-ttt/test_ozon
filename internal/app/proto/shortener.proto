@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 package shortener;
+option go_package = "app/shortener";
 import "google/protobuf/empty.proto";
 
 message IndexPageRequest{

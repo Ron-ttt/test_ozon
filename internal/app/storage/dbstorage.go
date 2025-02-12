@@ -30,10 +30,10 @@ func NewDBStorage(dbname string) (Storage, error) {
 	}
 	fmt.Println("2")
 	m, err := migrate.NewWithDatabaseInstance(
-		//"file://./migrations",
+		"file://./migrations",
 		//"file://./internal/app/migrations",
 		//"file://../migrations",
-		"file://C:/Users/lolim/ozon/test_ozon/internal/app/migrations",
+		//"file://C:/Users/lolim/ozon/test_ozon/internal/app/migrations",
 		"postgres", driver)
 	if err != nil {
 		fmt.Println(err)

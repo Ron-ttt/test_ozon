@@ -2,28 +2,23 @@ package config
 
 import (
 	"flag"
-	"os"
 )
 
-func Flags() (string, string, string) {
-	// Определение флагов
-	address := flag.String("a", "localhost:8080", "адрес запуска HTTP-сервера")
-	baseURL := flag.String("b", "http://localhost:8080", "базовый адрес результирующего сокращённого URL") // порты должны совпадать
-	db := flag.String("d", "", "адрес для бд")
+func Flags() bool {
 
-	// Парсинг флагов
+	flag.String("d", "", "choosing a storage location")
+
 	flag.Parse()
-	if envAddress := os.Getenv("SERVER_ADDRESS"); envAddress != "" {
-		*address = envAddress
-	}
 
-	if envBaseURL := os.Getenv("BASE_URL"); envBaseURL != "" {
-		*baseURL = envBaseURL
-	}
+	return isFlagPassed("d")
 
-	if envDB := os.Getenv("DATABASE_DSN"); envDB != "" {
-		*db = envDB
-	}
-
-	return *address, *baseURL, *db
+}
+func isFlagPassed(name string) bool {
+	found := false
+	flag.Visit(func(f *flag.Flag) {
+		if f.Name == name {
+			found = true
+		}
+	})
+	return found
 }

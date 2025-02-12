@@ -18,11 +18,15 @@ type URLRegistryResult struct {
 	Result string `json:"result"`
 }
 
-func Init() handlerWrapper {
-	localhost, baseURL, dbAdress := config.Flags()
+const localhost = "localhost:8080"
+const baseURL = "http://" + localhost
 
-	dbAdress = "postgresql://postgres:190603@localhost:5432/postgres?sslmode=disable"
-	if dbAdress != "" {
+func Init() handlerWrapper {
+
+	dbflag := config.Flags()
+
+	dbAdress := "postgresql://postgres_user:postgres_password@postgres_container:5432/postgres?sslmode=disable"
+	if dbflag {
 		dBStorage, err := storage.NewDBStorage(dbAdress)
 		if err == nil {
 			return handlerWrapper{storageInterface: dBStorage, Localhost: localhost, baseURL: baseURL + "/"}
