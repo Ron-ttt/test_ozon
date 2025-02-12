@@ -69,9 +69,11 @@ func (s *DBStorage) Get(key string) (string, error) {
 func (s *DBStorage) Find(originalUrl string) (string, error) {
 	rows := s.db.QueryRow("SELECT shorturl FROM links WHERE originalurl= $1", originalUrl)
 	var short string
+
 	err := rows.Scan(&short)
 	if err != nil {
 		return "", err
 	}
+
 	return short, nil
 }

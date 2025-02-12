@@ -51,18 +51,21 @@ func (hw handlerWrapper) IndexPage(res http.ResponseWriter, req *http.Request) {
 		http.Error(res, err.Error(), http.StatusBadRequest)
 		return
 	}
-	_, err1 := url.ParseRequestURI(longURL.URL)
-	if err1 != nil {
+
+	_, err := url.ParseRequestURI(longURL.URL)
+	if err != nil {
 		http.Error(res, "invalid url", http.StatusBadRequest)
 		return
 	}
-	var rez URLRegistryResult
-	oldshort, err := hw.storageInterface.Find(string(longURL.URL))
+
+	var response URLRegistryResult
+	oldShortURL, err := hw.storageInterface.Find(string(longURL.URL))
 	if err == nil {
 		res.Header().Set("content-type", "application/json")
 		res.WriteHeader(http.StatusConflict)
-		rez.Result = hw.baseURL + oldshort
-		if err := json.NewEncoder(res).Encode(rez); err != nil {
+		response.Result = hw.baseURL + oldShortURL
+
+		if err := json.NewEncoder(res).Encode(response); err != nil {
 			http.Error(res, err.Error(), http.StatusInternalServerError)
 			return
 		}
@@ -71,15 +74,18 @@ func (hw handlerWrapper) IndexPage(res http.ResponseWriter, req *http.Request) {
 
 	res.Header().Set("content-type", "application/json")
 	res.WriteHeader(http.StatusCreated)
-	length := 10 // Укажите длину строки
+
+	length := 10
 	randomString := utils.RandString(length)
-	rez.Result = hw.baseURL + randomString
+	response.Result = hw.baseURL + randomString
+
 	err = hw.storageInterface.Add(randomString, string(longURL.URL))
 	if err != nil {
 		http.Error(res, "error adding to database", http.StatusBadRequest)
 		return
 	}
-	if err := json.NewEncoder(res).Encode(rez); err != nil {
+
+	if err := json.NewEncoder(res).Encode(response); err != nil {
 		http.Error(res, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -88,11 +94,13 @@ func (hw handlerWrapper) IndexPage(res http.ResponseWriter, req *http.Request) {
 func (hw handlerWrapper) Redirect(res http.ResponseWriter, req *http.Request) { //get
 	params := mux.Vars(req)
 	id := params["id"]
+
 	originalURL, ok := hw.storageInterface.Get(id)
 	if ok != nil {
 		http.Error(res, "not found", http.StatusBadRequest)
 		return
 	}
+
 	res.Header().Set("Location", originalURL)
 	res.WriteHeader(http.StatusTemporaryRedirect)
 }

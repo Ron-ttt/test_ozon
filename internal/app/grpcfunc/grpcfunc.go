@@ -38,10 +38,12 @@ func Init() {
 
 func (s *ShortenerServer) RedirectTo(ctx context.Context, in *pb.RedirectToRequest) (*pb.RedirectToResponse, error) {
 	var response pb.RedirectToResponse
+
 	originalURL, err := store.Get(in.ShortURL)
 	if err != nil {
 		return nil, status.Error(codes.Internal, "Err occurred getting url")
 	}
+
 	response.OriginalURL = originalURL
 	return &response, nil
 }
@@ -55,9 +57,9 @@ func (s *ShortenerServer) IndexPage(ctx context.Context, in *pb.IndexPageRequest
 		return nil, err
 	}
 
-	oldshort, err := store.Find(in.OriginalUrl)
+	oldShortURL, err := store.Find(in.OriginalUrl)
 	if err == nil {
-		response.ShortUrl = baseURL + oldshort
+		response.ShortUrl = baseURL + oldShortURL
 		return &response, nil
 	}
 
@@ -68,6 +70,7 @@ func (s *ShortenerServer) IndexPage(ctx context.Context, in *pb.IndexPageRequest
 		err = status.Error(codes.Internal, "Err occurred adding url")
 		return nil, err
 	}
+
 	response.ShortUrl = code
 	return &response, nil
 }
