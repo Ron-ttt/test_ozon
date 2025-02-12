@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
@@ -22,29 +23,26 @@ func NewDBStorage(dbname string) (Storage, error) {
 		fmt.Println(err)
 		return nil, err
 	}
-	fmt.Println("1")
+
 	driver, err := postgres.WithInstance(db, &postgres.Config{})
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	fmt.Println("2")
+
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://./migrations",
-		//"file://./internal/app/migrations",
-		//"file://../migrations",
-		//"file://C:/Users/lolim/ozon/test_ozon/internal/app/migrations",
 		"postgres", driver)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	fmt.Println("3")
+
 	if err = m.Up(); err != nil && !errors.Is(err, migrate.ErrNoChange) {
 		fmt.Println(err)
 		return nil, err
 	}
-	fmt.Println("4")
+	log.Println("DB connected")
 	return &DBStorage{db: db}, nil
 }
 
