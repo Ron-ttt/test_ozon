@@ -40,7 +40,7 @@ func main() {
 		}
 	}()
 	log.Println("server is running")
-	err := http.ListenAndServe(hw.Localhost, r)
+	err := http.ListenAndServe(":8080", r)
 	if err != nil {
 		log.Fatal(err)
 	}
