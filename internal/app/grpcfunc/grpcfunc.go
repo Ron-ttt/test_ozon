@@ -29,8 +29,10 @@ func Init() {
 		dBStorage, err := storage.NewDBStorage(dbAdress)
 		if err == nil {
 			store = dBStorage
+			return
 		}
 	}
+
 	store = storage.NewMapStorage()
 }
 
